@@ -34,13 +34,13 @@
 import pandas as pd
 from itertools import zip_longest
 
-import target
-from target_estimation import fit
-from target_approximation_filter import Target_Approximation_Filter
+#import target
+#from target_estimation import fit
+from target_approximation_filter import target_filter
 
-from harry_plotter import finalize_plot
-from harry_plotter import get_plot
-from harry_plotter import get_plot_limits
+from .harry_plotter import finalize_plot
+from .harry_plotter import get_plot
+from .harry_plotter import get_plot_limits
 
 
 
@@ -105,17 +105,13 @@ class Target_Sequence():
 		#print( 'in get bound 2: {}'.format( self.onset_time ) )
 		return boundaries
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def get_contour( self, sr: float = None, sample_times = None ):
-		if sr == None:
-			constants = vtl.get_constants()
-			sr = constants[ 'samplerate_internal' ]
-		tam = Target_Approximation_Filter()
-		#print( 'get contour: {}'.format(self.onset_state) )
-		contour = tam.response( target_sequence = self.targets,
-			                    discretization_rate = sr,
-			                    onset_state = self.onset_state,
-			                    sample_times = sample_times,
-			                    )
+	def contour( self, sr: float = 500, sample_times = None ):
+		contour = target_filter(
+			target_sequence = self.targets,
+			sample_rate = sr,
+			onset_state = self.onset_state,
+			sample_times = sample_times,
+			)
 		return contour
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 	def plot(
@@ -123,7 +119,7 @@ class Target_Sequence():
 		plot_contour = True,
 		plot_targets = True,
 		ax = None,
-		plot_kwargs = PT.state_plot_kwargs,
+		#plot_kwargs = PT.state_plot_kwargs,
 		**kwargs,
 		): #, time = 'seconds'
 		figure, ax = get_plot( n_rows = 1, axs = ax )

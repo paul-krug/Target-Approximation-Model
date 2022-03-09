@@ -1,3 +1,27 @@
+"""
+Target-Appproximation-Model
+===========================
+
+Core objects
+-------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Target
+    Target_Sequence
+    Target_Score
+
+
+Time-domain processing
+---------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Target_Approximation_Filter
+"""
+
 __version__ = '0.1'
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -7,7 +31,7 @@ __version__ = '0.1'
 #
 #####################################################################################################################################################
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-from Target_Approximation_Model.target_estimation import fit
+#from TargetApproximationModel.target_estimation import fit
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 #####################################################################################################################################################
 
@@ -19,9 +43,10 @@ from Target_Approximation_Model.target_estimation import fit
 #
 #####################################################################################################################################################
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-from Target_Approximation_Model.targets import Target
-from Target_Approximation_Model.target_sequence import Target_Sequence
-from Target_Approximation_Model.target_score import Target_Score
-from Target_Approximation_Model import target_estimation
+from TargetApproximationModel.target import Target
+from TargetApproximationModel.target_sequence import Target_Sequence
+from TargetApproximationModel.target_score import Target_Score
+from TargetApproximationModel.target_approximation_filter import Target_Approximation_Filter
+#from TargetApproximationModel import target_estimation
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 #####################################################################################################################################################
