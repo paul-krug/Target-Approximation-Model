@@ -85,7 +85,7 @@ html_use_modindex = True
 # so a file named "default.css" will overwrite the builtin "default.css".
 
 
-html_logo = 'TargetApproximationModel/logo/TargetApproximationModelLogo.svg'
+html_logo = '../../TargetApproximationModel/logo/TargetApproximationModelLogo.svg'
 
 html_theme_options = {
     'logo_only': True,

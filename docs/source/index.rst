@@ -41,27 +41,12 @@ If you wish to cite the theoretic work behind the Target-Approximation-Model you
 
 
     core
-    display
-    feature
-    onset
-    beat
-    decompose
-    effects
-    segment
-    sequence
-    util
 
 
 .. toctree::
     :caption: Advanced topics
     :maxdepth: 2
 
-    multichannel
-    filters
-    cache
-    ioformats
-    advanced
-    recordings
 
 .. toctree::
     :caption: Reference

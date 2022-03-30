@@ -32,7 +32,7 @@ If you've downloaded the archive manually from the `releases
     cd TargetApproximationModel-VERSION/
     python setup.py install
 
-If you intend to develop librosa or make changes to the source code, you can
+If you intend to develop TargetApproximationModel or make changes to the source code, you can
 install with `pip install -e` to link to your actively developed source tree::
 
     tar xzf TargetApproximationModel-VERSION.tar.gz
