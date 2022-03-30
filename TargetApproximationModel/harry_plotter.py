@@ -9,9 +9,9 @@
 import warnings
 import numpy as np
 import matplotlib.pyplot as plt
-from .tools_io import check_if_list_is_valid
-from .tools_io import make_output_path
-from .tools_io import is_iterable
+from tools_io import check_if_list_is_valid
+from tools_io import make_output_path
+from tools_io import is_iterable
 
 
 hist_kwargs = dict( bins = 50, histtype = 'step', density = False )

@@ -26,7 +26,7 @@ if 'all' in sys.warnoptions:
     log.level = logging.DEBUG
 
 # Get version from the VocalTractLab module
-with open('Target-Approximation-Model/__init__.py') as f:
+with open('TargetApproximationModel/__init__.py') as f:
     for line in f:
         if line.find('__version__') >= 0:
             version = line.split('=')[1].strip()

@@ -1,35 +1,4 @@
-#####################################################################################################################################################
-#---------------------------------------------------------------------------------------------------------------------------------------------------#
-#	- This file is a part of the VocalTractLab Python module PyVTL, see https://github.com/paul-krug/VocalTractLab
-#---------------------------------------------------------------------------------------------------------------------------------------------------#
-#
-#	- Copyright (C) 2021, Paul Konstantin Krug, Dresden, Germany
-#	- https://github.com/paul-krug/VocalTractLab
-#	- Author: Paul Konstantin Krug, TU Dresden
-#
-#	- License info:
-#
-#		This program is free software: you can redistribute it and/or modify
-#		it under the terms of the GNU General Public License as published by
-#		the Free Software Foundation, either version 3 of the License, or
-#		(at your option) any later version.
-#		
-#		This program is distributed in the hope that it will be useful,
-#		but WITHOUT ANY WARRANTY; without even the implied warranty of
-#		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-#		GNU General Public License for more details.
-#		
-#		You should have received a copy of the GNU General Public License
-#		along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-#---------------------------------------------------------------------------------------------------------------------------------------------------#
-#####################################################################################################################################################
-#---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-#---------------------------------------------------------------------------------------------------------------------------------------------------#
-#####################################################################################################################################################
-#---------------------------------------------------------------------------------------------------------------------------------------------------#
-# Load essential packages:
 
 #import warnings
 import numpy as np
@@ -40,14 +9,9 @@ from scipy.special import factorial
 #from itertools import zip_longest
 #from itertools import chain
 #from collections import Counter
+from tools_io import is_iterable
 
-#from VocalTractLab import plotting_tools as PT
-#from VocalTractLab.plotting_tools import finalize_plot
-#from VocalTractLab.plotting_tools import get_plot
-#from VocalTractLab.plotting_tools import get_plot_limits
-#from VocalTractLab.plotting_tools import get_valid_tiers
-#from VocalTractLab import function_tools as FT
-from VocalTractLab.function_tools import is_iterable
+import TargetApproximationModel
 
 def target_filter(
 	target_sequence: list,
@@ -60,7 +24,7 @@ def target_filter(
 		target_sequence = target_sequence.targets
 	trajectory = []
 	start = target_sequence[ 0 ].onset_time
-	end   = target_sequence[ -1 ].offset_time
+	end   = target_sequence[ -1 ].offset_time()
 	duration = end - start
 	n_samples = duration * sample_rate
 	if not is_iterable( sample_times ):
@@ -100,7 +64,7 @@ def _calculate_coefficients(
 	filter_order,
 	):
 	coefficients = [ 0 for _ in current_state ]
-	assert len( coefficients ) == filter_order, 'Sometimes size does matter bro...'
+	assert len( coefficients ) == filter_order, 'Size conflict'
 	coefficients[ 0 ] = current_state[ 0 ] - target.offset
 	for n in range( 1, filter_order ):
 		acc = 0

@@ -46,7 +46,7 @@ __version__ = '0.1'
 from TargetApproximationModel.target import Target
 from TargetApproximationModel.target_sequence import Target_Sequence
 from TargetApproximationModel.target_score import Target_Score
-from TargetApproximationModel.target_approximation_filter import Target_Approximation_Filter
+#from TargetApproximationModel.target_approximation_filter import Target_Approximation_Filter
 #from TargetApproximationModel import target_estimation
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 #####################################################################################################################################################

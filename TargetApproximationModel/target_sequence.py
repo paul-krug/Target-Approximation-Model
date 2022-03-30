@@ -2,13 +2,15 @@
 # -*- coding: utf-8 -*-
 
 
+import warnings
 import pandas as pd
 from itertools import zip_longest
 
 #import target
 #from target_estimation import fit
-from target_approximation_filter import target_filter
+from .target_approximation_filter import target_filter
 
+from .harry_plotter import state_plot_kwargs
 from .harry_plotter import finalize_plot
 from .harry_plotter import get_plot
 from .harry_plotter import get_plot_limits
@@ -34,6 +36,8 @@ class Target_Sequence():
 		):
 		if targets != None:
 			self.targets = targets
+			for index, target in enumerate( self.targets[ 1: ] ):
+				target.onset_time = self.targets[ index ].offset_time()
 		else:
 			self.targets = []
 			function_argument_names = [ 'duration', 'slope', 'offset', 'time_constant' ]
@@ -90,14 +94,14 @@ class Target_Sequence():
 		plot_contour = True,
 		plot_targets = True,
 		ax = None,
-		#plot_kwargs = PT.state_plot_kwargs,
+		plot_kwargs = state_plot_kwargs,
 		**kwargs,
 		): #, time = 'seconds'
 		figure, ax = get_plot( n_rows = 1, axs = ax )
 		if plot_contour:
 			#tam = Target_Approximation_Model()
 			#contour = tam.response( self.targets )
-			contour = self.get_contour()
+			contour = self.contour()
 			contour_kwargs = plot_kwargs.get( self.name )
 			if contour_kwargs == None:
 				warnings.warn( 'The parameter: {} does not exist in the plot_kwargs dict, doing a standard plot now.'.format( self.name ) )
@@ -116,9 +120,9 @@ class Target_Sequence():
 				#if time == 'samples':
 				#	constants = vtl.get_constants()
 				#	x *= constants[ 'samplerate_internal' ]
-				ax[ 0 ].axvline( tar.offset_time, color = 'black' )
-				x = [ tar.onset_time, tar.offset_time ]
-				y = [ tar.slope * (tar.onset_time-tar.onset_time) + tar.offset, tar.slope * (tar.offset_time-tar.onset_time) + tar.offset ]
+				ax[ 0 ].axvline( tar.offset_time(), color = 'black' )
+				x = [ tar.onset_time, tar.offset_time() ]
+				y = [ tar.slope * (tar.onset_time-tar.onset_time) + tar.offset, tar.slope * (tar.offset_time()-tar.onset_time) + tar.offset ]
 				ax[ 0 ].plot( x, y, color = 'black', linestyle='--' )
 				y_data.append( y )
 			if not plot_contour:
