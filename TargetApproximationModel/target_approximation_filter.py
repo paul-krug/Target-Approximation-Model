@@ -11,7 +11,7 @@ from scipy.special import factorial
 #from collections import Counter
 from tools_io import is_iterable
 
-import TargetApproximationModel
+import TargetApproximationModel as tam
 
 def target_filter(
 	target_sequence: list,
@@ -20,7 +20,7 @@ def target_filter(
 	sample_times: list = None,
 	filter_order: int = 5,
 	):
-	if isinstance( target_sequence, TargetApproximationModel.Target_Sequence ):
+	if isinstance( target_sequence, tam.TargetSequence ):
 		target_sequence = target_sequence.targets
 	trajectory = []
 	start = target_sequence[ 0 ].onset_time

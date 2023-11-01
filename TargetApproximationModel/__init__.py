@@ -24,6 +24,10 @@ Time-domain processing
 
 __version__ = '0.1'
 
+from .target import *
+from .target_sequence import *
+from .target_score import *
+
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 #####################################################################################################################################################
 #
@@ -43,9 +47,9 @@ __version__ = '0.1'
 #
 #####################################################################################################################################################
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-from TargetApproximationModel.target import Target
-from TargetApproximationModel.target_sequence import Target_Sequence
-from TargetApproximationModel.target_score import Target_Score
+#from TargetApproximationModel.target import Target
+#from TargetApproximationModel.target_sequence_old import Target_Sequence
+#from TargetApproximationModel.target_score import Target_Score
 #from TargetApproximationModel.target_approximation_filter import Target_Approximation_Filter
 #from TargetApproximationModel import target_estimation
 #---------------------------------------------------------------------------------------------------------------------------------------------------#

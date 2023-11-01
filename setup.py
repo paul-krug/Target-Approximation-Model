@@ -37,9 +37,11 @@ with open('TargetApproximationModel/__init__.py') as f:
 
 # Dependencies
 DEPENDENCIES = [
-    'matplotlib>=3.4.3',
-    'numpy>=1.22.0',
-    'pandas>=1.3.2',
+    'matplotlib',
+    'numpy',
+    'pandas',
+    'scipy',
+    'tools-io',
 ]
 
 
