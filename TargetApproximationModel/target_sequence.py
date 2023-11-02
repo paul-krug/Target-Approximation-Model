@@ -88,6 +88,7 @@ class TargetSequence():
             time_constants: Union[ List[ float ], float ] =  0.015,
             onset_time: float = 0.0,
             onset_state: float = None,
+            name: Optional[ str ] = None,
             ):
         
         targets = []
@@ -103,7 +104,12 @@ class TargetSequence():
         if not isinstance(time_constants, list):
             time_constants = [time_constants]
 
-        lengths = [ len(x) for x in [durations, offsets, slopes, time_constants] if x != 1 ]
+        print( durations, offsets, slopes, time_constants )
+
+
+
+        lengths = [ len(x) for x in [durations, offsets, slopes, time_constants] if len(x) != 1 ]
+        print( lengths)
         # check if all lengths are equal
         if len(set(lengths)) > 1:
             raise ValueError("All input lists must have the same length or be a single value.")
@@ -123,7 +129,7 @@ class TargetSequence():
             )
             targets.append(target)
 
-        return cls(targets)
+        return cls(targets=targets, name=name)
 
 
     #@classmethod
