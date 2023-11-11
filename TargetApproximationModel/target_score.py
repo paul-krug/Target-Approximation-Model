@@ -1,66 +1,21 @@
 #!/usr/bin/env python        
 # -*- coding: utf-8 -*-
 
+import math
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from .harry_plotter import finalize_plot
 from .harry_plotter import get_plot
 from .harry_plotter import get_plot_limits
 from .harry_plotter import get_valid_tiers
+from .harry_plotter import state_hist_kwargs, state_plot_kwargs
+
 from .target_sequence import TargetSequence
 
 from typing import List, Optional, Dict, Any, Union, Tuple, Iterable
 
-
-def read_tract_seq_GLP( index ):
-	if (index > 7) and (index % 2 == 0):
-		return False
-	else:
-		return True
-
-def read_tract_seq_VTP( index ):
-	if (index > 7) and ((index-1) % 2 == 0):
-		return False
-	else:
-		return True
-
-
-class MotorSeries( TargetSeries ):
-    
-    def __init__(
-            self,
-            series: np.ndarray,
-            sr: float,
-            ):
-        tiers = [
-            'VX',
-            'VO',
-            'TRX',
-        ]
-        super().__init__( series, sr, tiers )
-        return
-    
-    @classmethod
-    def from_motor_file(
-            cls,
-            path: str,
-            sr = None,
-            ):
-        if sr is None:
-            sr = 44100/110 #Dont use hardcode here but vtl_constants
-        df = pd.read_csv(
-            path,
-            delim_whitespace = True,
-            skiprows= lambda x: _read_tract_seq_VTP(x),
-            header = None,
-            )
-        df_GLP = pd.read_csv( tract_file_path, delim_whitespace = True, skiprows= lambda x: read_tract_seq_GLP(x) , header = None )
-		df_VTP = pd.read_csv( tract_file_path, delim_whitespace = True, skiprows= lambda x: read_tract_seq_VTP(x) , header = None )
-		return cls( Supra_Glottal_Sequence( df_VTP.to_numpy() ), Sub_Glottal_Sequence( df_GLP.to_numpy() ), tract_file_path )
-        return cls( df.to_numpy(), sr = sr )
-    
-    
 
 
 
@@ -76,9 +31,9 @@ class TargetSeries():
             ):
         print( f'len tiers: { len( tiers ) }' )
         print( f'series shape: { series.shape }' )
-        if len( tiers ) != series.shape[ 0 ]:
+        if len( tiers ) != series.shape[ -1 ]:
             raise ValueError( 'tiers and series must have the same length' )
-        self.series = pd.DataFrame( series.T, columns = tiers )
+        self.series = pd.DataFrame( series, columns = tiers )
         self.sr = sr
         self.tiers = tiers
         print( 'tiers: ', self.tiers )
@@ -86,8 +41,99 @@ class TargetSeries():
             raise ValueError( 'tiers must be unique' )
         return
     
+    def __len__( self, ):
+        return len( self.series )
+    
+    def __iter__( self, ):
+        return iter( self.series )
+    
+    #def __add__( self, other ):
+    #    return TargetSequence( self.targets + other.targets )
+    
+    #def __radd__( self, other ):
+    #    return TargetSequence( other.targets + self.targets )
+    
     def __str__(self) -> str:
         return self.series.__str__()
+    
+    def __getitem__( self, index ):
+        return self.series[ index ]
+    
+    
+    def plot(
+            self,
+            plot_type = 'trajectory',
+            time = 'seconds',
+            **kwargs,
+            ):
+        if plot_type in [ 'trajectory', 'trajectories', 'time' ]:
+            return self.plot_trajectories( time = time, **kwargs )
+        elif plot_type in [ 'distribution', 'distributions', 'dist', 'dists' ]:
+            return self.plot_distributions( **kwargs )
+
+    def plot_distributions(
+            self,
+            parameters = None,
+            axs = None,
+            n_columns = 5,
+            plot_kwargs = state_hist_kwargs,
+            **kwargs
+            ):
+        parameters = get_valid_tiers( parameters, self.tiers )
+        n_rows = math.ceil( len( parameters ) / n_columns )
+        figure, axs = get_plot(
+            n_rows = n_rows,
+            n_columns = n_columns,
+            axs = axs,
+            sharex = False,
+            sharey = True,
+            gridspec_kw = {},
+            )
+        index_row = 0
+        index_col = 0
+        for index, parameter in enumerate( parameters ):
+            if index_col == n_columns:
+                index_row += 1
+                index_col = 0
+            y = self[ parameter ]
+            axs[ index_row, index_col ].hist( y, **plot_kwargs.get( parameter ) )
+            axs[ index_row, index_col ].set( xlabel = parameter ) #, ylim = get_plot_limits( y ) )
+            index_col += 1
+        #for ax in axs:
+        #    ax.label_outer()
+        finalize_plot( figure, axs, hide_labels = False, **kwargs )
+        return axs
+
+    def plot_trajectories(
+            self,
+            parameters = None,
+            axs = None,
+            time = 'seconds',
+            plot_kwargs = state_plot_kwargs,
+            **kwargs,
+            ):
+        parameters = get_valid_tiers( parameters, self.tiers )
+        #constants = vtl.get_constants()
+        figure, axs = get_plot( n_rows = len( parameters ), axs = axs )
+        for index, parameter in enumerate( parameters ):
+            y = self[ parameter ]
+            x = np.array( range( 0, len( y ) ) )
+            if time == 'seconds':
+                #x = x / constants[ 'samplerate_internal' ]
+                x = x / (44100/110)
+            axs[ index ].plot( x, y, **plot_kwargs.get( parameter ) )
+            axs[ index ].set( ylabel = parameter, ylim = get_plot_limits( y ) )
+        if time == 'seconds':
+            plt.xlabel( 'Time [s]' )
+        else:
+            plt.xlabel( 'Frame' )
+        #for ax in axs:
+        #    ax.label_outer()
+        finalize_plot( figure, axs, **kwargs )
+        return axs
+    
+    def to_numpy( self ):
+        return self.series.to_numpy()
     
     def to_target_score(
             self,
@@ -99,6 +145,7 @@ class TargetSeries():
             durations = durations,
             onset_time = onset_time,
             )
+    
     
 
 

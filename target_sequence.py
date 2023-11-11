@@ -4,10 +4,27 @@
 
 from TargetApproximationModel.target import Target
 from TargetApproximationModel.target_sequence import TargetSequence
-from TargetApproximationModel.target_score import TargetScore
+from TargetApproximationModel.target_score import TargetScore, TractSeries
+
 
     
 if __name__ == '__main__':
+    tract = TractSeries.from_motor_file( 'valid_motor_series.txt' )
+
+    tract_numpy = tract.to_numpy()
+    print( tract_numpy.shape )
+    stop
+    print( tract )
+    tract.plot(
+        plot_type='dist',
+        #parameters = [ 'TCX', 'TCY' ],
+        time = 'samples',
+        )
+
+
+
+
+    stop
     tgs_1 = TargetSequence.from_params(
         durations = [ 0.1, 0.2, 0.3 ],
         offsets = [ 1, 2, 3 ],
